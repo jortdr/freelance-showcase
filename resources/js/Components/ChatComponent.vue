@@ -1,21 +1,31 @@
 <template>
     <div>
-        <div class="flex flex-col justify-end h-80">
-            <div ref="messagesContainer" class="p-4 overflow-y-auto max-h-fit">
+        <div class="flex flex-col justify-end h-[40rem]">
+            <div ref="messagesContainer" class="p-4 overflow-y-auto overflow-x-clip max-h-fit">
                 <div
                     v-for="message in messages"
                     :key="message.id"
                     class="flex items-center mb-2"
                 >
-                    <div
-                        v-if="message.sender_id === currentUser.id"
-                        class="p-2 ml-auto text-white bg-blue-500 rounded-lg"
-                    >
-                        {{ message.text }}
+                    <div v-if="message.sender_id === currentUser.id" class="ml-auto text-right max-w-full">
+                        <p class="p-2 ml-auto text-white bg-blue-500 rounded-lg text-ellipsis ">
+                            {{ message.text }}
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            {{ currentUser.name }} - {{ formatTimestamp(message.created_at) }}
+                        </p>
                     </div>
-                    <div v-else class="p-2 mr-auto bg-gray-200 rounded-lg">
-                        {{ message.text }}
+                    <div v-else class="mr-auto text-left max-w-full">
+                        <p class="p-2 mr-auto bg-gray-200 rounded-lg text-ellipsis ">
+                            {{ message.text }}
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            {{ friend.name }} - {{ formatTimestamp(message.created_at) }}
+                        </p>
                     </div>
+                </div>
+                <div v-if="messages.length === 0" class="text-center">
+                    <p class="text-gray-500">No messages yet. Start the conversation!</p>
                 </div>
             </div>
         </div>
@@ -43,7 +53,7 @@
 
 <script setup>
 import axios from "axios";
-import { nextTick, onMounted, ref, watch } from "vue";
+import {nextTick, onMounted, ref, watch} from "vue";
 
 const props = defineProps({
     friend: {
@@ -72,8 +82,18 @@ watch(
             });
         });
     },
-    { deep: true }
+    {deep: true}
 );
+
+const formatTimestamp = (timestamp) => {
+    return new Date(timestamp).toLocaleTimeString("en-GB", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
 
 const sendMessage = () => {
     if (newMessage.value.trim() !== "") {

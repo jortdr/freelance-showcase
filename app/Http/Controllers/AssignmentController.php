@@ -6,9 +6,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AssignmentRequest;
 use App\Models\Assignment;
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -21,18 +21,27 @@ class AssignmentController extends Controller
     {
         $this->authorize('viewAny', Assignment::class);
 
+        $assignments = $request->user()->hasRole('admin')
+            ? Assignment::with('user')->get()
+            : $request->user()->assignments()->get();
+
         return Inertia::render('Assignments/Index', [
-            'assignments' => $request->user()->assignments()->with('user')->get(),
+            'assignments' => $assignments,
+            'isAdmin' => $request->user()->hasRole('admin'),
         ]);
     }
 
-    public function store(AssignmentRequest $request): RedirectResponse
+    public function store(AssignmentRequest $request): JsonResponse
     {
         $this->authorize('create', Assignment::class);
 
-        $assignment = Assignment::create($request->validated());
+        $valid = $request->validated();
 
-        return redirect()->route('assignments.show', ['assignment' => $assignment->id])->with('success', 'Assignment created.');
+        $valid['user_id'] = $request->user()->id;
+
+        $assignment = Assignment::create($valid);
+
+        return response()->json(['assignment' => $assignment->id]);
     }
 
     public function create(): InertiaResponse
@@ -46,7 +55,20 @@ class AssignmentController extends Controller
     {
         $this->authorize('view', $assignment);
 
+        $receiver = auth()->user()->hasRole('admin') ? $assignment->user : User::admin();
+
         return Inertia::render('Assignments/Show', [
+            'assignment' => $assignment,
+            'currentUser' => auth()->user(),
+            'receiver' => $receiver,
+        ]);
+    }
+
+    public function edit(Assignment $assignment): InertiaResponse
+    {
+        $this->authorize('update', $assignment);
+
+        return Inertia::render('Assignments/Edit', [
             'assignment' => $assignment,
         ]);
     }

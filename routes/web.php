@@ -32,10 +32,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/', 'store')->name('assignments.store');
         Route::get('/create', 'create')->name('assignments.create');
         Route::get('/{assignment}', 'show')->name('assignments.show');
+        Route::get('/{assignment}/edit', 'edit')->name('assignments.edit');
         Route::patch('/{assignment}', 'update')->name('assignments.update');
+        Route::delete('/{assignment}', 'destroy')->name('assignments.destroy');
     });
 
-    Route::get('/chat/{friend}', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/messages/{friend}', [ChatController::class, 'messages'])->name('chat.messages');
     Route::post('/messages/{friend}', [ChatController::class, 'store'])->name('chat.store');
 });

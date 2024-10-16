@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->string('title');
-            $table->string('description')->default('');
+            $table->text('description');
             $table->integer('budget')->default(0);
             $table->string('status')->default('pending');
             $table->timestamps();

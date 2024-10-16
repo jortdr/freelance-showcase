@@ -9,15 +9,22 @@ import Button from "primevue/button";
 import Divider from "primevue/divider";
 import Toast from "primevue/toast";
 import {useToast} from "primevue/usetoast";
-import axios from "axios";
 import Textarea from "primevue/textarea";
+import axios from "axios";
 
 const toast = useToast();
 
+const props = defineProps({
+    assignment: {
+        type: Object,
+        required: true,
+    },
+})
+
 const form = ref({
-    title: '',
-    description: '',
-    budget: null,
+    title: props.assignment.title,
+    description: props.assignment.description,
+    budget: props.assignment.budget,
 });
 
 const submitForm = () => {
@@ -25,20 +32,20 @@ const submitForm = () => {
         return;
     }
 
-    axios.post('/assignments', form.value)
-        .then((response) => {
-            toast.add({severity: 'success', summary: 'Success', detail: 'Assignment created successfully. Redirecting...'});
-            form.value.title = '';
-            form.value.description = '';
-            form.value.budget = null;
-
+    axios.patch('/assignments/' + props.assignment.id, form.value)
+        .then(() => {
+            toast.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Assignment updated successfully. Redirecting...'
+            });
             //wait 3 sec and redirect
             setTimeout(() => {
-                window.location.href = '/assignments/' + response.data.assignment;
+                window.location.href = route('assignments.show', props.assignment.id);
             }, 3000);
         })
         .catch(() => {
-            toast.add({severity: 'error', summary: 'Error', detail: 'Failed to create assignment'});
+            toast.add({severity: 'error', summary: 'Error', detail: 'Failed to update assignment'});
         });
 }
 const validateForm = () => {
@@ -64,9 +71,9 @@ const showError = (message) => {
 
 <template>
     <Toast/>
-    <AuthenticatedLayout title="Create assignment">
-        <h1>Create Assignment</h1>
-        <p>Please fill in the details below and I will reach out to you very soon!</p>
+    <AuthenticatedLayout title="Update assignment">
+        <h1>Update Assignment</h1>
+        <p>Feel free to update your assignment.</p>
         <Divider/>
         <br>
         <div class="form flex flex-col">
@@ -77,7 +84,7 @@ const showError = (message) => {
         <div class="form flex flex-col">
             <label for="description">Description *</label>
             <Textarea
-id="description" v-model:model-value="form.description" placeholder="Explain your project..."
+id="description" v-model:model-value="form.description"
                       style="height: 320px"/>
         </div>
 
@@ -90,7 +97,7 @@ id="description" v-model:model-value="form.description" placeholder="Explain you
             </InputGroup>
         </div>
         <div>
-            <Button @click="submitForm">Create</Button>
+            <Button @click="submitForm">Update</Button>
         </div>
     </AuthenticatedLayout>
 </template>

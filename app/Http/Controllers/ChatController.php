@@ -9,18 +9,9 @@ use App\Events\MessageSent;
 use App\Models\ChatMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class ChatController extends Controller
 {
-    public function index(User $friend)
-    {
-        return Inertia::render('Chat', [
-            'friend' => $friend,
-            'currentUser' => auth()->user(),
-        ]);
-    }
-
     public function messages(User $friend)
     {
         return ChatMessage::query()

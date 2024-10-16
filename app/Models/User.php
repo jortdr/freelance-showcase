@@ -36,6 +36,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    public static function admin(): User
+    {
+        return User::role('admin')->first();
+    }
+
     public function assignments(): HasMany
     {
         return $this->hasMany(Assignment::class);
