@@ -89,7 +89,7 @@ const sendMessage = () => {
 };
 
 const sendTypingEvent = () => {
-    Echo.private(`chat.${props.friend.id}`).whisper("typing", {
+    Echo.private(`chat.${props.currentUser.id}.${props.friend.id}`).whisper("typing", {
         userID: props.currentUser.id,
     });
 };
@@ -100,7 +100,7 @@ onMounted(() => {
         messages.value = response.data;
     });
 
-    Echo.private(`chat.${props.currentUser.id}`)
+    Echo.private(`chat.${props.currentUser.id}.${props.friend.id}`)
         .listen("MessageSent", (response) => {
             messages.value.push(response.message);
         })
