@@ -64,6 +64,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    toast: {
+        type: Object,
+        required: true,
+    },
 });
 
 const messages = ref([]);
@@ -101,10 +105,29 @@ const sendMessage = () => {
             .post(`/messages/${props.friend.id}`, {
                 message: newMessage.value,
             })
+            .catch((error) => processError(error))
             .then((response) => {
                 messages.value.push(response.data);
                 newMessage.value = "";
             });
+    }
+};
+
+const processError = (error) => {
+    if (error.response.status === 429) {
+        props.toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "You are sending too many messages. Please wait a few seconds.",
+            life: 5000,
+        });
+    } else {
+        props.toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Failed to send message",
+            life: 5000,
+        });
     }
 };
 
@@ -115,10 +138,12 @@ const sendTypingEvent = () => {
 };
 
 onMounted(() => {
-    axios.get(`/messages/${props.friend.id}`).then((response) => {
-        console.log(response.data);
-        messages.value = response.data;
-    });
+    axios.get(`/messages/${props.friend.id}`)
+        .catch((error) => processError(error))
+        .then((response) => {
+            console.log(response.data);
+            messages.value = response.data;
+        });
 
     Echo.private(`chat.${props.currentUser.id}.${props.friend.id}`)
         .listen("MessageSent", (response) => {

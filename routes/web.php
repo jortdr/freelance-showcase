@@ -37,8 +37,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{assignment}', 'destroy')->name('assignments.destroy');
     });
 
-    Route::get('/messages/{friend}', [ChatController::class, 'messages'])->name('chat.messages');
-    Route::post('/messages/{friend}', [ChatController::class, 'store'])->name('chat.store');
+    Route::group(['controller' => ChatController::class, 'prefix' => 'messages', 'middleware' => 'throttle:50,1'], function () {
+        Route::get('/{friend}', 'messages')->name('chat.messages');
+        Route::post('/{friend}', 'store')->name('chat.store');
+    });
 });
 
 require __DIR__ . '/auth.php';
