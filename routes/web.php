@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/{assignment}', 'show')->name('assignments.show');
         Route::patch('/{assignment}', 'update')->name('assignments.update');
     });
+
+    Route::get('/chat/{friend}', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/messages/{friend}', [ChatController::class, 'messages'])->name('chat.messages');
+    Route::post('/messages/{friend}', [ChatController::class, 'store'])->name('chat.store');
+
 });
 
 require __DIR__ . '/auth.php';
