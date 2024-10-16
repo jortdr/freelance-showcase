@@ -21,16 +21,16 @@
         </div>
         <div class="flex items-center">
             <input
-                type="text"
                 v-model="newMessage"
-                @keydown="sendTypingEvent"
-                @keyup.enter="sendMessage"
+                type="text"
                 placeholder="Type a message..."
                 class="flex-1 px-2 py-1 border rounded-lg"
+                @keydown="sendTypingEvent"
+                @keyup.enter="sendMessage"
             />
             <button
-                @click="sendMessage"
                 class="px-4 py-1 ml-2 text-white bg-blue-500 rounded-lg"
+                @click="sendMessage"
             >
                 Send
             </button>

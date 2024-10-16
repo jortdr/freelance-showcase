@@ -38,7 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/chat/{friend}', [ChatController::class, 'index'])->name('chat.index');
     Route::get('/messages/{friend}', [ChatController::class, 'messages'])->name('chat.messages');
     Route::post('/messages/{friend}', [ChatController::class, 'store'])->name('chat.store');
-
 });
 
 require __DIR__ . '/auth.php';

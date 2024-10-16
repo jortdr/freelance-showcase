@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 // app/Http/Controllers/ChatController.php
 
 namespace App\Http\Controllers;
@@ -6,8 +8,8 @@ namespace App\Http\Controllers;
 use App\Events\MessageSent;
 use App\Models\ChatMessage;
 use App\Models\User;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ChatController extends Controller
 {
@@ -40,7 +42,7 @@ class ChatController extends Controller
         $message = ChatMessage::create([
             'sender_id' => auth()->id(),
             'receiver_id' => $friend->id,
-            'text' => $request->input('message')
+            'text' => $request->input('message'),
         ]);
 
         broadcast(new MessageSent($message));

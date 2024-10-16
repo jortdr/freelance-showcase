@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
 use App\Models\ChatMessage;
@@ -13,9 +15,7 @@ class MessageSent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public ChatMessage $message)
-    {
-    }
+    public function __construct(public ChatMessage $message) {}
 
     public function broadcastOn(): array
     {
