@@ -27,7 +27,11 @@ const submitForm = () => {
 
     axios.post('/assignments', form.value)
         .then((response) => {
-            toast.add({severity: 'success', summary: 'Success', detail: 'Assignment created successfully. Redirecting...'});
+            toast.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Assignment created successfully. Redirecting...'
+            });
             form.value.title = '';
             form.value.description = '';
             form.value.budget = null;
@@ -71,13 +75,13 @@ const showError = (message) => {
         <br>
         <div class="form flex flex-col">
             <label for="title">Title *</label>
-            <InputText id="title" v-model="form.title" required type="text"/>
+            <InputText id="title" minlength="1" maxlength="255" v-model="form.title" required type="text"/>
         </div>
 
         <div class="form flex flex-col">
             <label for="description">Description *</label>
-            <Textarea
-id="description" v-model:model-value="form.description" placeholder="Explain your project..."
+            <Textarea minlength="1" maxlength="5000"
+                      id="description" v-model:model-value="form.description" placeholder="Explain your project..."
                       style="height: 320px"/>
         </div>
 
@@ -85,7 +89,8 @@ id="description" v-model:model-value="form.description" placeholder="Explain you
             <label for="budget">Budget *</label>
             <InputGroup style="height: 40px; width: 50%">
                 <InputGroupAddon>$</InputGroupAddon>
-                <InputNumber id="budget" v-model="form.budget" aria-required="true" placeholder="Price"/>
+                <InputNumber id="budget" min="0" max="100000" v-model="form.budget" aria-required="true"
+                             placeholder="Price"/>
                 <InputGroupAddon>.00</InputGroupAddon>
             </InputGroup>
         </div>

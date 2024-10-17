@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Http\Requests\StoreMessageRequest;
 use App\Models\ChatMessage;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
@@ -28,12 +28,13 @@ class ChatController extends Controller
             ->get();
     }
 
-    public function store(Request $request, User $friend)
+    public function store(StoreMessageRequest $request, User $friend)
     {
+        $valid = $request->validated();
         $message = ChatMessage::create([
             'sender_id' => auth()->id(),
             'receiver_id' => $friend->id,
-            'text' => $request->input('message'),
+            'text' => $valid['message'],
         ]);
 
         broadcast(new MessageSent($message));

@@ -78,21 +78,21 @@ const showError = (message) => {
         <br>
         <div class="form flex flex-col">
             <label for="title">Title *</label>
-            <InputText id="title" v-model="form.title" required type="text"/>
+            <InputText id="title" minlength="1" maxlength="255" v-model="form.title" required type="text"/>
         </div>
 
         <div class="form flex flex-col">
             <label for="description">Description *</label>
             <Textarea
-id="description" v-model:model-value="form.description"
-                      style="height: 320px"/>
+                id="description" v-model:model-value="form.description" minlength="1" maxlength="5000"
+                style="height: 320px"/>
         </div>
 
         <div class="form flex flex-col">
             <label for="budget">Budget *</label>
             <InputGroup style="height: 40px; width: 50%">
                 <InputGroupAddon>$</InputGroupAddon>
-                <InputNumber id="budget" v-model="form.budget" aria-required="true" placeholder="Price"/>
+                <InputNumber id="budget" min="1" max="100000" v-model="form.budget" aria-required="true" placeholder="Price"/>
                 <InputGroupAddon>.00</InputGroupAddon>
             </InputGroup>
         </div>
