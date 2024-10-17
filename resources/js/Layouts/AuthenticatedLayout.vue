@@ -1,16 +1,22 @@
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
+
 
 const showingNavigationDropdown = ref(false);
+
+defineProps({
+    title: String,
+});
 </script>
 
 <template>
+    <Head :title="title"/>
     <div>
         <div class="min-h-screen bg-gray-100">
             <nav
@@ -38,6 +44,12 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink
+                                    :href="route('assignments.index')"
+                                    :active="route().current('assignments.index')"
+                                >
+                                    Assignments
                                 </NavLink>
                             </div>
                         </div>
@@ -185,14 +197,31 @@ const showingNavigationDropdown = ref(false);
                 class="bg-white shadow"
             >
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    <slot name="header" />
+                    <slot name="header"/>
                 </div>
             </header>
 
             <!-- Page Content -->
             <main>
-                <slot />
+                <div class="py-12">
+                    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                        <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                            <div class="p-6 text-gray-900">
+                                <slot/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
 </template>
+
+<style>
+h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+</style>

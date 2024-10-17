@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import {computed} from 'vue';
 
 const emit = defineEmits(['update:checked']);
 
@@ -9,6 +9,7 @@ const props = defineProps({
         required: true,
     },
     value: {
+        type: Boolean,
         default: null,
     },
 });
