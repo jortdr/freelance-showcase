@@ -35,7 +35,9 @@
                 type="text"
                 placeholder="Type a message..."
                 class="flex-1 px-2 py-1 border rounded-lg"
-                @keydown="sendTypingEvent"
+                minlength="1"
+                maxlength="1000"
+                @keydown="sendTypingEvent($event)"
                 @keyup.enter="sendMessage"
             />
             <button
@@ -131,8 +133,11 @@ const processError = (error) => {
     }
 };
 
-const sendTypingEvent = () => {
-    Echo.private(`chat.${props.currentUser.id}.${props.friend.id}`).whisper("typing", {
+const sendTypingEvent = (event) => {
+    if (event.key.length !== 1) {
+        return;
+    }
+    Echo.private(`chat.${props.friend.id}.${props.currentUser.id}`).whisper("typing", {
         userID: props.currentUser.id,
     });
 };

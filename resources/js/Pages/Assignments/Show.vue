@@ -36,8 +36,8 @@ defineProps({
                 <p><strong>Title:</strong> {{ assignment.title }}</p>
                 <p><strong>Description</strong></p>
                 <Textarea
-:value="assignment.description" readonly style="resize:none;"
-                          class="w-full h-[50vh] border-0 m-0 p-5"/>
+                    :value="assignment.description" readonly style="resize:none;"
+                    class="w-full h-[50vh] border-0 m-0 p-5"/>
                 <p><strong>Budget:</strong> ${{ assignment.budget }} USD</p>
                 <NavLink :href="route('assignments.edit', assignment.id)">
                     <Button label="Edit Assignment" class="mt-4" icon="pi pi-pencil"/>

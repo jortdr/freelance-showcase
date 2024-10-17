@@ -6,9 +6,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Http\Requests\StoreMessageRequest;
 use App\Models\ChatMessage;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class ChatController extends Controller
 {
@@ -25,16 +26,22 @@ class ChatController extends Controller
             })
             ->with(['sender', 'receiver'])
             ->orderBy('id', 'asc')
-            ->get();
+            ->get()->each(function ($message) {
+                $message->text = Crypt::decryptString($message->text);
+            });
     }
 
-    public function store(Request $request, User $friend)
+    public function store(StoreMessageRequest $request, User $friend)
     {
+        $valid = $request->validated();
+        $encrypted = Crypt::encryptString($valid['message']);
         $message = ChatMessage::create([
             'sender_id' => auth()->id(),
             'receiver_id' => $friend->id,
-            'text' => $request->input('message'),
+            'text' => $encrypted,
         ]);
+
+        $message->text = $valid['message'];
 
         broadcast(new MessageSent($message));
 
