@@ -75,13 +75,14 @@ const showError = (message) => {
         <br>
         <div class="form flex flex-col">
             <label for="title">Title *</label>
-            <InputText id="title" minlength="1" maxlength="255" v-model="form.title" required type="text"/>
+            <InputText id="title" v-model="form.title" minlength="1" maxlength="255" required type="text"/>
         </div>
 
         <div class="form flex flex-col">
             <label for="description">Description *</label>
-            <Textarea minlength="1" maxlength="5000"
-                      id="description" v-model:model-value="form.description" placeholder="Explain your project..."
+            <Textarea
+id="description" v-model:model-value="form.description"
+                      minlength="1" maxlength="5000" placeholder="Explain your project..."
                       style="height: 320px"/>
         </div>
 
@@ -89,7 +90,8 @@ const showError = (message) => {
             <label for="budget">Budget *</label>
             <InputGroup style="height: 40px; width: 50%">
                 <InputGroupAddon>$</InputGroupAddon>
-                <InputNumber id="budget" min="0" max="100000" v-model="form.budget" aria-required="true"
+                <InputNumber
+id="budget" v-model="form.budget" min="0" max="100000" aria-required="true"
                              placeholder="Price"/>
                 <InputGroupAddon>.00</InputGroupAddon>
             </InputGroup>
