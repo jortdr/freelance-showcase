@@ -21,7 +21,7 @@ defineProps({
     receiver: {
         type: Object,
         required: true,
-    },
+    }
 });
 
 </script>
@@ -39,7 +39,7 @@ defineProps({
                     :value="assignment.description" readonly style="resize:none;"
                     class="w-full h-[50vh] border-0 m-0 p-5"/>
                 <p><strong>Budget:</strong> ${{ assignment.budget }} USD</p>
-                <NavLink :href="route('assignments.edit', assignment.id)">
+                <NavLink v-if="assignment.user.id === currentUser.id" :href="route('assignments.edit', assignment.id)">
                     <Button label="Edit Assignment" class="mt-4" icon="pi pi-pencil"/>
                 </NavLink>
 

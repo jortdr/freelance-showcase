@@ -54,7 +54,7 @@ const deleteAssignment = (id) => {
                 <h1>Assignments</h1>
                 <p>Here you can see your assignments.</p>
             </div>
-            <NavLink :href="route('assignments.create')">
+            <NavLink v-if="!isAdmin" :href="route('assignments.create')">
                 <Button label="Create Assignment" outlined icon="pi pi-plus"/>
             </NavLink>
         </div>
